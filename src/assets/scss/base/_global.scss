@@ -1,0 +1,30 @@
+// Global styles goes here
+
+#root {
+    height: 100%;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-color: $secondary transparent;
+    scrollbar-width: thin;
+}
+
+.transition {
+    transition: $transition-timing all;
+}
+
+.border-radius {
+    border-radius: $border-radius;
+}
