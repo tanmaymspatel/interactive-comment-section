@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Commments from "./pages/Commments";
 
 function App() {
 
@@ -6,7 +7,7 @@ function App() {
   return (
     <div className="h-100 bg-body">
       <div className="h-100 container">
-        <p>prima</p>
+        <Commments />
       </div>
     </div>
   );
