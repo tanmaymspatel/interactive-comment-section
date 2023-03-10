@@ -1,9 +1,13 @@
-// // theme Color
+// theme Color
 $primary: hsl(238, 40%, 52%); //  Moderate blue: 
 $secondary: hsl(239, 57%, 85%); // Light grayish blue: 
-$info: #8ab6f9;
-$dark: #000000;
+$info: hsl(228, 33%, 97%); // Very light gray: 
 $danger: hsl(358, 79%, 66%); // Soft Red: 
-$light: #FFFFFF;
-$warning: #F6BE2B;
-$success: #28a745;
+$light: hsl(0, 0%, 100%);
+$warning: hsl(357, 100%, 86%); // Pale red:
+$success: hsl(211, 10%, 45%); // Grayish Blue:
+$dark: hsl(212, 24%, 26%); // Dark blue: 
+
+// Light gray: hsl(223, 19%, 93%)
+
+$body : $info;
