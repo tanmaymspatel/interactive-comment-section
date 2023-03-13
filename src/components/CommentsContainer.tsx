@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
+import SingleCommentCard from "./SingleCommentCard";
 
 
 function CommentsContainer() {
@@ -17,27 +18,34 @@ function CommentsContainer() {
     }, [setComments]);
 
     return (
-        <div className="my-5">
+        <div className="py-5">
             {
                 comments.map((comment: ICommentsDetails) => {
                     return (
-                        <div className="card rounded-3 my-3 p-3" key={comment?.id}>
-                            <div className="row">
-                                <div className="col-2">{comment?.upvotes}</div>
-                                <div className="col-10">
-                                    <div className="header row">
-                                        <div className="col-6 d-flex align-items-center">
-                                            <p>profile-picture</p>
-                                            <p>{comment?.userName}</p>
-                                            <p>{comment.commentingDate}</p>
-                                        </div>
-                                        <div className="col-6">
-                                            <div className="text-end">
-                                                <p>Reply</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div key={comment?.id}>
+                            <SingleCommentCard
+                                key={comment?.id}
+                                upvotes={comment?.upvotes}
+                                userName={comment?.userName}
+                                profilePicture={comment?.profilePicture}
+                                commentingDate={comment?.commentingDate}
+                                content={comment?.content}
+                            />
+                            <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
+                                {
+                                    comment?.replies?.length > 0 && comment.replies.map((comment: ICommentsDetails) => {
+                                        return (
+                                            <SingleCommentCard
+                                                key={comment?.id}
+                                                upvotes={comment?.upvotes}
+                                                userName={comment?.userName}
+                                                profilePicture={comment?.profilePicture}
+                                                commentingDate={comment?.commentingDate}
+                                                content={comment?.content}
+                                            />
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     )

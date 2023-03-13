@@ -1,3 +1,8 @@
+import amyrobson from "../../assets/images/avatars/image-amyrobson.png"
+import maxblagun from "../../assets/images/avatars/image-maxblagun.png"
+import ramsesmiron from "../../assets/images/avatars/image-ramsesmiron.png"
+import juliusomo from "../../assets/images/avatars/image-juliusomo.png"
+
 export const commentsData = [
     {
         "id": 1,
@@ -5,6 +10,7 @@ export const commentsData = [
         "commentingDate": "23 November 2021",
         "upvotes": 12,
         "userName": "amyrobson",
+        "profilePicture": amyrobson,
         "isCurrentUSer": false,
         "replies": []
     },
@@ -14,6 +20,7 @@ export const commentsData = [
         "commentingDate": "5 December 2021",
         "upvotes": 5,
         "userName": "maxblagun",
+        "profilePicture": maxblagun,
         "isCurrentUSer": false,
         "replies": [
             {
@@ -22,6 +29,7 @@ export const commentsData = [
                 "commentingDate": "18 December 2021",
                 "upvotes": 4,
                 "userName": "ramsesmiron",
+                "profilePicture": ramsesmiron,
                 "isCurrentUSer": false,
                 "replies": []
             },
@@ -31,6 +39,7 @@ export const commentsData = [
                 "commentingDate": "30 December 2021",
                 "upvotes": 2,
                 "userName": "juliusomo",
+                "profilePicture": juliusomo,
                 "isCurrentUSer": true,
                 "replies": []
             }

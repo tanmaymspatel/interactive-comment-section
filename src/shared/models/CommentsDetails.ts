@@ -4,6 +4,7 @@ export interface ICommentsDetails {
     commentingDate: string,
     upvotes: number,
     userName: string,
+    profilePicture: string,
     isCurrentUSer: boolean,
     replies: ICommentsDetails[]
 }
