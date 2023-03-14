@@ -1,0 +1,12 @@
+textarea {
+    resize: none;
+    border: 1px solid $warning;
+    border-radius: 8px;
+    transition: 0.25s all;
+    outline: none;
+
+    &:focus-visible,
+    &:hover {
+        border: 1px solid $primary;
+    }
+}

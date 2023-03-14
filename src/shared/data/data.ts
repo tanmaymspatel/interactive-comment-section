@@ -12,6 +12,7 @@ export const commentsData = [
         "userName": "amyrobson",
         "profilePicture": amyrobson,
         "isCurrentUSer": false,
+        "voted": false,
         "replies": []
     },
     {
@@ -22,6 +23,7 @@ export const commentsData = [
         "userName": "maxblagun",
         "profilePicture": maxblagun,
         "isCurrentUSer": false,
+        "voted": false,
         "replies": [
             {
                 "id": 3,
@@ -31,6 +33,7 @@ export const commentsData = [
                 "userName": "ramsesmiron",
                 "profilePicture": ramsesmiron,
                 "isCurrentUSer": false,
+                "voted": false,
                 "replies": []
             },
             {

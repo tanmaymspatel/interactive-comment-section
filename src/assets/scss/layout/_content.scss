@@ -1,8 +1,19 @@
 .comments-container {
-    width: 1000px;
+    width: 850px;
+
+    .btn-actions {
+        color: rgba($primary, 0.5);
+        transition: 0.2s all;
+        font-size: 1.25rem;
+
+        &:hover {
+            color: rgba($primary, 1);
+        }
+    }
 
     .profile-image {
         width: 40px;
         height: auto;
     }
+
 }
