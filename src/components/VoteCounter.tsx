@@ -1,15 +1,20 @@
 import { useState } from "react";
 
-function VoteCounter({ comment, type }: any) {
+function VoteCounter({ comment, type, replies, comments, parentIndex }: any) {
 
     const [isVoted, setIsVoted] = useState<boolean>(comment.voted ?? false);
     const [score, setScore] = useState<number>(comment.upvotes);
 
     const upvoteHandler = () => {
-        console.log(type);
+        console.log({ type }, { comment }, { replies }, { comments }, { parentIndex });
         if (!isVoted) {
-            setScore(score + 1);
+            let n = score + 1;
+            setScore(n);
+            console.log(score);
+
             setIsVoted(true);
+            if (type === "reply") console.log(comments[parentIndex].replies);
+
         }
     }
 

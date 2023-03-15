@@ -7,11 +7,34 @@ import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 
 function CommentsContainer() {
 
-    const [comments, setComments] = useState<ICommentsDetails[]>([]);
+    const [comments, setComments] = useState<ICommentsDetails[]>(commentsData);
+
+    // const updateScore = (score: number, type: string, id: number, isVoted: boolean) => {
+    //     let updatedComments = [...comments]
+
+    //     if (type === "main-comment") {
+    //         updatedComments.forEach(data => {
+    //             data.upvotes = score;
+    //             data.voted = isVoted;
+    //         })
+    //     } else if (type === "reply") {
+    //         updatedComments.forEach((comment) => {
+    //             comment.replies.forEach((data) => {
+    //                 if (data.id === id) {
+    //                     data.upvotes = score;
+    //                     data.voted = isVoted;
+    //                 }
+    //             });
+    //         });
+    //     }
+    //     setComments(updatedComments);
+    //     console.log({ comments });
+
+    // }
 
     useEffect(() => {
-        localStorage.setItem("comments", JSON.stringify(commentsData))
-    }, []);
+        localStorage.setItem("comments", JSON.stringify(comments))
+    }, [comments]);
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("comments") as string);
@@ -23,7 +46,7 @@ function CommentsContainer() {
             <div className="flex-grow-1 overflow-hidden pt-5 pb-3">
                 <div className="h-100 overflow-auto pe-3">
                     {
-                        comments.map((comment: ICommentsDetails) => {
+                        comments.map((comment: ICommentsDetails, index: number) => {
                             return (
                                 <div key={comment?.id}>
                                     <SingleCommentCard
@@ -40,7 +63,9 @@ function CommentsContainer() {
                                                         key={cmt?.id}
                                                         comment={cmt}
                                                         replies={comment.replies}
+                                                        comments={comments}
                                                         type="reply"
+                                                        parentIndex={index}
                                                     />
                                                 )
                                             })
