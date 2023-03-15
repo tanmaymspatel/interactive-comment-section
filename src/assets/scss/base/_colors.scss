@@ -2,12 +2,9 @@
 $primary: hsl(238, 40%, 52%); //  Moderate blue: 
 $secondary: hsl(239, 57%, 85%); // Light grayish blue: 
 $info: hsl(228, 33%, 97%); // Very light gray: 
-$danger: hsl(358, 79%, 66%); // Soft Red: 
+$danger: hsl(358, 79%, 66%); // Soft Red: normal
 $light: hsl(0, 0%, 100%);
-$warning: hsl(357, 100%, 86%); // Pale red:
+// $warning: hsl(357, 100%, 86%); // Pale red:
+$warning: hsl(223, 19%, 93%); // Pale red:
 $success: hsl(211, 10%, 45%); // Grayish Blue:
 $dark: hsl(212, 24%, 26%); // Dark blue: 
-
-// Light gray: hsl(223, 19%, 93%)
-
-$body : $info;

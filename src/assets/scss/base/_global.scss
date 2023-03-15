@@ -1,12 +1,13 @@
 // Global styles goes here
 
-#root {
+#root,
+html,
+body {
     height: 100%;
 }
 
 html,
 body {
-    height: 100%;
     overflow: hidden;
 }
 

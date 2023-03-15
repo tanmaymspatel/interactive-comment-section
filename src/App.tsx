@@ -1,12 +1,11 @@
-import { useState } from "react";
+import Commments from "./pages/Commments";
 
 function App() {
 
-  const [] = useState()
   return (
-    <div className="h-100 bg-body">
-      <div className="h-100 container">
-        <p>prima</p>
+    <div className="h-100 bg-info">
+      <div className="comments-container h-100 container d-flex flex-column p-4">
+        <Commments />
       </div>
     </div>
   );
