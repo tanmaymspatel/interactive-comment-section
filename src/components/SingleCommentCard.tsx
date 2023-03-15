@@ -2,7 +2,7 @@ import utilityServices from "../shared/services/utilityServices";
 import reply from "../assets/images/icon-reply.svg"
 import VoteCounter from "./VoteCounter";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, updateScore }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, mainIndex, setReplyCommentIndex, replyIndex }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -10,11 +10,26 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, upda
     const currentDate = new Date();
     const commentTimeInMiliSeconds = currentDate.getTime() - commentDate.getTime();
 
+    const replyHandler = () => {
+        switch (type) {
+            case "main-comment":
+                setIsParentComment((prev: boolean) => !prev);
+                setParentCommentIndex(mainIndex)
+                return;
+            case "reply":
+                setIsReply((prev: boolean) => !prev);
+                setReplyCommentIndex(setReplyCommentIndex);
+                return;
+            default:
+                return;
+        }
+    }
+
     return (
         <div className="card rounded-3 mb-4 p-4">
             <div className="row">
                 <div className="col-1">
-                    <VoteCounter comment={comment} type={type} replies={replies} comments={comments} parentIndex={parentIndex} updateScore={updateScore} />
+                    <VoteCounter comment={comment} type={type} replies={replies} comments={comments} parentIndex={parentIndex} />
                 </div>
                 <div className="col-11">
                     <div className="header row">
@@ -26,7 +41,9 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, upda
                         </div>
                         <div className="col-4">
                             <div className="text-end">
-                                <div className="cursor-pointer text-primary fw-bold">
+                                <div className="cursor-pointer text-primary fw-bold"
+                                    onClick={replyHandler}
+                                >
                                     <img src={reply} alt="reply" />
                                     <span className="mx-1">Reply</span>
                                 </div>
