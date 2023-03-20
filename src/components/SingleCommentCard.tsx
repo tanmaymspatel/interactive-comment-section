@@ -1,8 +1,10 @@
 import utilityServices from "../shared/services/utilityServices";
 import reply from "../assets/images/icon-reply.svg"
 import VoteCounter from "./VoteCounter";
+import deleteIcon from "../assets/images/icon-delete.svg"
+import editIcon from "../assets/images/icon-edit.svg"
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, mainIndex, setReplyCommentIndex, replyIndex }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, mainIndex, setReplyParentIndex, setISReplying }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -11,6 +13,7 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
     const commentTimeInMiliSeconds = currentDate.getTime() - commentDate.getTime();
 
     const replyHandler = () => {
+        setISReplying(true);
         switch (type) {
             case "main-comment":
                 setIsParentComment((prev: boolean) => !prev);
@@ -18,12 +21,33 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
                 return;
             case "reply":
                 setIsReply((prev: boolean) => !prev);
-                setReplyCommentIndex(setReplyCommentIndex);
+                setReplyParentIndex(parentIndex);
                 return;
             default:
                 return;
         }
     }
+
+    const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between">
+        <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover">
+            <img src={deleteIcon} alt="delete-comment" />
+            <span className="mx-1">Delete</span>
+        </p>
+        <p className="text-primary d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover">
+            <img src={editIcon} alt="edit-comment" />
+            <span className="mx-1">Edit</span>
+        </p>
+    </div>
+
+    const replyText = <div className="w-100 text-end">
+        <div className="cursor-pointer text-primary fw-bold"
+            onClick={replyHandler}
+        >
+            <img src={reply} alt="reply" />
+            <span className="mx-1">Reply</span>
+        </div>
+    </div>
+
 
     return (
         <div className="card rounded-3 mb-4 p-4">
@@ -39,15 +63,8 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
                             {comment.isCurrentUSer && <p className=" mb-0 px-3 py-1 text-light bg-primary rounded-1">you</p>}
                             <p className="mx-2 mb-0">{`${commentPostedTime(commentTimeInMiliSeconds)} ago`}</p>
                         </div>
-                        <div className="col-4">
-                            <div className="text-end">
-                                <div className="cursor-pointer text-primary fw-bold"
-                                    onClick={replyHandler}
-                                >
-                                    <img src={reply} alt="reply" />
-                                    <span className="mx-1">Reply</span>
-                                </div>
-                            </div>
+                        <div className="col-4 d-flex align-items-center justify-content-end">
+                            {comment.isCurrentUSer ? deleteEditText : replyText}
                         </div>
                     </div>
                     <p className="mb-0 pt-2">{content}</p>

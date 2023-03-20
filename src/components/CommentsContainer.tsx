@@ -1,51 +1,30 @@
 import { useState, useEffect } from "react"
-import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import CommentInput from "./CommentInput";
 import SingleCommentCard from "./SingleCommentCard";
 
-
-
 function CommentsContainer() {
 
-    const [comments, setComments] = useState<ICommentsDetails[]>(commentsData);
-    // const [isReplying, setIsReplying] = useState<boolean>(false);
+    const allComments = JSON.parse(localStorage.getItem("comments") as string)
+
+    const [comments, setComments] = useState<ICommentsDetails[]>(allComments);
     const [isParentComment, setIsParentComment] = useState<boolean>(false);
     const [isReplyComment, setIsReply] = useState<boolean>(false);
+    const [isReplying, setISReplying] = useState<boolean>(false);
     const [parentCommentIndex, setParentCommentIndex] = useState<number>(0);
-    const [replyCommentIndex, setReplyCommentIndex] = useState<number>(0);
+    const [replyParentIndex, setReplyParentIndex] = useState<number>(0);
 
-    // const updateScore = (score: number, type: string, id: number, isVoted: boolean) => {
-    //     let updatedComments = [...comments]
-
-    //     if (type === "main-comment") {
-    //         updatedComments.forEach(data => {
-    //             data.upvotes = score;
-    //             data.voted = isVoted;
-    //         })
-    //     } else if (type === "reply") {
-    //         updatedComments.forEach((comment) => {
-    //             comment.replies.forEach((data) => {
-    //                 if (data.id === id) {
-    //                     data.upvotes = score;
-    //                     data.voted = isVoted;
-    //                 }
-    //             });
-    //         });
-    //     }
-    //     setComments(updatedComments);
-    //     console.log({ comments });
-
-    // }
+    const addComments = (newComment: ICommentsDetails) => {
+        const updatedComments = [...comments, newComment];
+        setComments(updatedComments);
+        localStorage.setItem("comments", JSON.stringify(comments));
+    };
 
     useEffect(() => {
+        console.log(comments);
         localStorage.setItem("comments", JSON.stringify(comments))
     }, [comments]);
 
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("comments") as string);
-        if (data.length > 0) setComments(data);
-    }, [setComments]);
 
     return (
         <>
@@ -60,14 +39,15 @@ function CommentsContainer() {
                                         comment={comment}
                                         comments={comments}
                                         mainIndex={index}
+                                        setISReplying={setISReplying}
                                         setIsParentComment={setIsParentComment}
                                         setParentCommentIndex={setParentCommentIndex}
                                         type="main-comment"
                                     />
-                                    {(isParentComment && parentCommentIndex === index) ? <CommentInput /> : null}
+                                    {(isParentComment && parentCommentIndex === index) ? <CommentInput isReplying={isReplying} /> : null}
                                     <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
                                         {
-                                            comment?.replies?.length > 0 && comment.replies.map((cmt: ICommentsDetails, i: number) => {
+                                            comment?.replies?.length > 0 && comment.replies.map((cmt: ICommentsDetails) => {
                                                 return (
                                                     <SingleCommentCard
                                                         key={cmt?.id}
@@ -75,15 +55,15 @@ function CommentsContainer() {
                                                         replies={comment.replies}
                                                         comments={comments}
                                                         type="reply"
+                                                        setISReplying={setISReplying}
                                                         setIsReply={setIsReply}
                                                         parentIndex={index}
-                                                        replyIndex={i}
-                                                        setReplyCommentIndex={setReplyCommentIndex}
+                                                        setReplyParentIndex={setReplyParentIndex}
                                                     />
                                                 )
                                             })
                                         }
-                                        {(isReplyComment) ? <CommentInput /> : null}
+                                        {(isReplyComment && (replyParentIndex === index)) ? <CommentInput isReplying={isReplying} /> : null}
                                     </div>
                                 </div>
                             )
@@ -91,7 +71,7 @@ function CommentsContainer() {
                     }
                 </div>
             </div>
-            <CommentInput />
+            <CommentInput addComments={addComments} />
         </>
     )
 };

@@ -1,6 +1,29 @@
+import { useState } from "react";
 import currentUSer from "../assets/images/avatars/image-juliusomo.png"
+import { ICommentsDetails } from "../shared/models/CommentsDetails";
+import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
-function CommentInput() {
+function CommentInput({ isReplying, addComments }: any) {
+
+    const [commentContent, setCommentContent] = useState<string>("");
+
+    const submitHandler = () => {
+        if (commentContent === "" || commentContent === " ") return;
+
+        const newComment: ICommentsDetails = {
+            id: Math.floor(Math.random() * 100) + 5,
+            content: commentContent,
+            commentingDate: new Date().toString(),
+            upvotes: 0,
+            userName: "juliusomo",
+            profilePicture: profilePicture,
+            isCurrentUSer: true,
+            replies: [],
+        };
+
+        addComments(newComment);
+        setCommentContent("");
+    }
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
@@ -8,10 +31,15 @@ function CommentInput() {
                     <img src={currentUSer} alt="current-user" className="profile-image" />
                 </figure>
                 <div className="col-9">
-                    <textarea className="comment-box w-100 p-2" name="comment" id="comment" rows={3}></textarea>
+                    <textarea
+                        className="comment-box w-100 p-2"
+                        name="comment" id="comment" rows={3} autoFocus
+                        value={commentContent}
+                        onChange={(e) => setCommentContent(e.target.value)}
+                    ></textarea>
                 </div>
                 <div className="col-2">
-                    <button className="w-100 col-2 btn btn-primary">SEND</button>
+                    <button type="submit" className="w-100 col-2 btn btn-primary" onClick={submitHandler}>{isReplying ? "REPLY" : "SEND"}</button>
                 </div>
             </div>
         </div>
