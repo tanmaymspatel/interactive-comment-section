@@ -3,8 +3,9 @@ import reply from "../assets/images/icon-reply.svg"
 import VoteCounter from "./VoteCounter";
 import deleteIcon from "../assets/images/icon-delete.svg"
 import editIcon from "../assets/images/icon-edit.svg"
+import DeleteModel from "./DeleteModel";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, mainIndex, setReplyParentIndex, setISReplying }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, mainIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -13,7 +14,8 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
     const commentTimeInMiliSeconds = currentDate.getTime() - commentDate.getTime();
 
     const replyHandler = () => {
-        setISReplying(true);
+        setIsReplying((prev: boolean) => !prev);
+        setReplyTo(`@${comment?.userName}`);
         switch (type) {
             case "main-comment":
                 setIsParentComment((prev: boolean) => !prev);
@@ -28,8 +30,12 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         }
     }
 
+    const deleteCommentHandler = () => {
+        setDeleting(true);
+    };
+
     const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between">
-        <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover">
+        <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={deleteCommentHandler}>
             <img src={deleteIcon} alt="delete-comment" />
             <span className="mx-1">Delete</span>
         </p>
@@ -50,27 +56,30 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
 
 
     return (
-        <div className="card rounded-3 mb-4 p-4">
-            <div className="row">
-                <div className="col-1">
-                    <VoteCounter comment={comment} type={type} replies={replies} comments={comments} parentIndex={parentIndex} />
-                </div>
-                <div className="col-11">
-                    <div className="header row">
-                        <div className="col-8 d-flex align-items-center">
-                            <img src={profilePicture} alt="profile" className="profile-image" />
-                            <p className="mx-3 mb-0 fw-bold">{userName}</p>
-                            {comment.isCurrentUSer && <p className=" mb-0 px-3 py-1 text-light bg-primary rounded-1">you</p>}
-                            <p className="mx-2 mb-0">{`${commentPostedTime(commentTimeInMiliSeconds)} ago`}</p>
-                        </div>
-                        <div className="col-4 d-flex align-items-center justify-content-end">
-                            {comment.isCurrentUSer ? deleteEditText : replyText}
-                        </div>
+        <>
+            <div className="card rounded-3 mb-4 p-4">
+                <div className="row">
+                    <div className="col-1">
+                        <VoteCounter comment={comment} type={type} replies={replies} comments={comments} parentIndex={parentIndex} />
                     </div>
-                    <p className="mb-0 pt-2">{content}</p>
+                    <div className="col-11">
+                        <div className="header row">
+                            <div className="col-8 d-flex align-items-center">
+                                <img src={profilePicture} alt="profile" className="profile-image" />
+                                <p className="mx-3 mb-0 fw-bold">{userName}</p>
+                                {comment.isCurrentUSer && <p className=" mb-0 px-3 py-1 text-light bg-primary rounded-1">you</p>}
+                                <p className="mx-2 mb-0">{`${commentPostedTime(commentTimeInMiliSeconds)} ago`}</p>
+                            </div>
+                            <div className="col-4 d-flex align-items-center justify-content-end">
+                                {comment.isCurrentUSer ? deleteEditText : replyText}
+                            </div>
+                        </div>
+                        <p className="mb-0 pt-2">{content}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+            {deleting ? <DeleteModel setDeleting={setDeleting} type={type} comment={comment} deleteComment={deleteComment} /> : null}
+        </>
     )
 };
 

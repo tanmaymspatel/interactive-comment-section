@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
-function CommentInput({ isReplying, addComments }: any) {
+function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, type }: any) {
 
-    const [commentContent, setCommentContent] = useState<string>("");
+    const replyingToUser = isReplying ? replyTo : "";
+
+    const [commentContent, setCommentContent] = useState<string>(replyingToUser);
 
     const submitHandler = () => {
         if (commentContent === "" || commentContent === " ") return;
@@ -21,9 +23,14 @@ function CommentInput({ isReplying, addComments }: any) {
             replies: [],
         };
 
-        addComments(newComment);
+        isReplying ? addReplies(type, parentId, newComment) : addComments(newComment);
         setCommentContent("");
+        setIsReplying(false);
     }
+
+    useEffect(() => {
+        if (isReplying) console.log(replyTo);
+    }, [isReplying, replyTo])
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
