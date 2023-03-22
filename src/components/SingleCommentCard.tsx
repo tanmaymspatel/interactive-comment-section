@@ -5,7 +5,7 @@ import deleteIcon from "../assets/images/icon-delete.svg"
 import editIcon from "../assets/images/icon-edit.svg"
 import DeleteModel from "./DeleteModel";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -36,12 +36,19 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         setDeleting(true);
     };
 
+    const editCommentHandler = () => {
+        setIsEditing((prev: boolean) => !prev);
+        replyHandler();
+        setIsReplying(false);
+        setCommentTobeEdited(comment);
+    }
+
     const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between">
         <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={deleteCommentHandler}>
             <img src={deleteIcon} alt="delete-comment" />
             <span className="mx-1">Delete</span>
         </p>
-        <p className="text-primary d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover">
+        <p className="text-primary d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={editCommentHandler}>
             <img src={editIcon} alt="edit-comment" />
             <span className="mx-1">Edit</span>
         </p>

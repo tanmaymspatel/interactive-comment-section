@@ -3,13 +3,18 @@ import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
-function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, type }: any) {
+function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, isEditing, setIsEditing, commentTobeEdited }: any) {
 
     const replyingToUser = isReplying ? replyTo : "";
-
     const [commentContent, setCommentContent] = useState<string>(replyingToUser);
 
+    useEffect(() => {
+        console.log(commentTobeEdited);
+    }, [commentTobeEdited])
+
+
     const submitHandler = () => {
+        console.log({ isEditing }, { isReplying });
         if (commentContent === "" || commentContent === " ") return;
 
         const newComment: ICommentsDetails = {
@@ -23,14 +28,17 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
             replies: [],
         };
 
-        isReplying ? addReplies(parentId, newComment) : addComments(newComment);
+        (isReplying && !isEditing) ? addReplies(parentId, newComment) : addComments(newComment);
         setCommentContent("");
+        debugger
         setIsReplying(false);
+        setIsEditing(false);
+        console.log({ isEditing }, { isReplying });
     }
 
     useEffect(() => {
-        if (isReplying) console.log(replyTo);
-    }, [isReplying, replyTo])
+        isEditing ? setCommentContent(commentTobeEdited?.content) : setCommentContent(commentContent);
+    }, [])
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
@@ -46,7 +54,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
                     ></textarea>
                 </div>
                 <div className="col-2">
-                    <button type="submit" className="w-100 col-2 btn btn-primary" onClick={submitHandler}>{isReplying ? "REPLY" : "SEND"}</button>
+                    <button type="submit" className="w-100 col-2 btn btn-primary" onClick={submitHandler}>{isReplying ? "REPLY" : (isEditing ? "UPDATE" : "SEND")}</button>
                 </div>
             </div>
         </div>

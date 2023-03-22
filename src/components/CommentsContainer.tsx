@@ -19,6 +19,8 @@ function CommentsContainer() {
     const [deleting, setDeleting] = useState<boolean>(false);
     const [replyCommentParentIndex, setReplyCommentParentIndex] = useState<number>(0);
     const [deleteReplyId, setDeleteReplyId] = useState<number>(0);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [commentTobeEdited, setCommentTobeEdited] = useState<ICommentsDetails>({} as ICommentsDetails)
 
     const addComments = (newComment: ICommentsDetails) => {
         const updatedComments = [...comments, newComment];
@@ -85,8 +87,12 @@ function CommentsContainer() {
                                         deleting={deleting}
                                         deleteComment={deleteComment}
                                         index={index}
+                                        setIsEditing={setIsEditing}
+                                        setReplyCommentParentIndex={setReplyCommentParentIndex}
+                                        setDeleteReplyId={setDeleteReplyId}
+                                        setCommentTobeEdited={setCommentTobeEdited}
                                     />
-                                    {(isReplying && isParentComment && parentCommentIndex === index) ? <CommentInput addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} parentId={comment?.id} /> : null}
+                                    {((isReplying || isEditing) && isParentComment && parentCommentIndex === index) ? <CommentInput addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
                                     <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
                                         {
                                             comment?.replies?.length > 0 && comment?.replies?.map((cmt: ICommentsDetails) => {
@@ -108,11 +114,13 @@ function CommentsContainer() {
                                                         index={index}
                                                         setReplyCommentParentIndex={setReplyCommentParentIndex}
                                                         setDeleteReplyId={setDeleteReplyId}
+                                                        setIsEditing={setIsEditing}
+                                                        setCommentTobeEdited={setCommentTobeEdited}
                                                     />
                                                 )
                                             })
                                         }
-                                        {(isReplying && isReplyComment && (replyParentIndex === index)) ? <CommentInput addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} parentId={comment?.id} /> : null}
+                                        {((isReplying || isEditing) && isReplyComment && (replyParentIndex === index)) ? <CommentInput addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
                                     </div>
                                 </div>
                             )
@@ -120,7 +128,7 @@ function CommentsContainer() {
                     }
                 </div>
             </div>
-            <CommentInput addComments={addComments} setIsReplying={setIsReplying} />
+            <CommentInput addComments={addComments} setIsReplying={setIsReplying} setIsEditing={setIsEditing} />
         </>
     )
 };
