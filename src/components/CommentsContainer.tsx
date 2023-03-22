@@ -107,7 +107,7 @@ function CommentsContainer() {
                     }
                 </div>
             </div>
-            <CommentInput addComments={addComments} />
+            <CommentInput addComments={addComments} setIsReplying={setIsReplying} />
         </>
     )
 };

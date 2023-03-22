@@ -23,7 +23,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
             replies: [],
         };
 
-        isReplying ? addReplies(type, parentId, newComment) : addComments(newComment);
+        isReplying ? addReplies(parentId, newComment) : addComments(newComment);
         setCommentContent("");
         setIsReplying(false);
     }
