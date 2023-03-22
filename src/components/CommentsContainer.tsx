@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Commments from "../pages/Commments";
 import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import CommentInput from "./CommentInput";
@@ -16,6 +17,8 @@ function CommentsContainer() {
     const [replyParentIndex, setReplyParentIndex] = useState<number>(0);
     const [replyTo, setReplyTo] = useState<string>("");
     const [deleting, setDeleting] = useState<boolean>(false);
+    const [replyCommentParentIndex, setReplyCommentParentIndex] = useState<number>(0);
+    const [deleteReplyId, setDeleteReplyId] = useState<number>(0);
 
     const addComments = (newComment: ICommentsDetails) => {
         const updatedComments = [...comments, newComment];
@@ -34,19 +37,25 @@ function CommentsContainer() {
     }
 
     const deleteComment = (type: string, id: number) => {
-        // console.log(type, id);
+        let updatedComments = [...comments];
         switch (type) {
             case "main-comment": {
-                let updatedComments = [...comments];
                 updatedComments = updatedComments.filter(comment => comment.id !== id);
                 setComments(updatedComments);
                 return;
             }
             case "reply": {
-
+                console.log(comments[replyCommentParentIndex].replies, deleteReplyId);
+                const updatedReplies = updatedComments[replyCommentParentIndex].replies.filter(reply => reply.id !== deleteReplyId)
+                updatedComments[replyCommentParentIndex].replies = updatedReplies;
+                setComments(updatedComments);
+                return;
             }
+            default:
+                return;
         }
     }
+
 
     useEffect(() => {
         // console.log(comments);
@@ -66,7 +75,7 @@ function CommentsContainer() {
                                         key={comment?.id}
                                         comment={comment}
                                         comments={comments}
-                                        mainIndex={index}
+                                        parentIndex={index}
                                         setIsReplying={setIsReplying}
                                         setIsParentComment={setIsParentComment}
                                         setParentCommentIndex={setParentCommentIndex}
@@ -75,6 +84,7 @@ function CommentsContainer() {
                                         setDeleting={setDeleting}
                                         deleting={deleting}
                                         deleteComment={deleteComment}
+                                        index={index}
                                     />
                                     {(isReplying && isParentComment && parentCommentIndex === index) ? <CommentInput addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} parentId={comment?.id} /> : null}
                                     <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
@@ -95,6 +105,9 @@ function CommentsContainer() {
                                                         setDeleting={setDeleting}
                                                         deleting={deleting}
                                                         deleteComment={deleteComment}
+                                                        index={index}
+                                                        setReplyCommentParentIndex={setReplyCommentParentIndex}
+                                                        setDeleteReplyId={setDeleteReplyId}
                                                     />
                                                 )
                                             })
