@@ -1,26 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function VoteCounter({ comment, type, replies, comments, parentIndex }: any) {
+function VoteCounter({ comment, type, parentIndex, updateScore }: any) {
 
     const [isVoted, setIsVoted] = useState<boolean>(comment.voted ?? false);
     const [score, setScore] = useState<number>(comment.upvotes);
 
     const upvoteHandler = () => {
-        console.log({ type }, { comment }, { replies }, { comments }, { parentIndex });
         if (!isVoted) {
-            let n = score + 1;
-            setScore(n);
-            console.log(score);
-
+            setScore(prev => prev + 1);
             setIsVoted(true);
-            if (type === "reply") console.log(comments[parentIndex].replies);
-
         }
     }
 
+    // useEffect(() => {
+    //     updateScore(type, score, isVoted, parentIndex);
+    // }, [score, isVoted, type, updateScore, parentIndex]);
+
     const downVoteHandler = () => {
         if (isVoted) {
-            setScore(score - 1);
+            setScore(prev => prev - 1);
             setIsVoted(false);
         }
     }

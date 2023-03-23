@@ -5,7 +5,7 @@ import deleteIcon from "../assets/images/icon-delete.svg"
 import editIcon from "../assets/images/icon-edit.svg"
 import DeleteModel from "./DeleteModel";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited, setEditedCommentParentIndex, setEditedReplyIndex, replyCommentIndex }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited, setEditedCommentParentIndex, setEditedReplyIndex, replyCommentIndex, updateScore }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -72,7 +72,7 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
             <div className="card rounded-3 mb-4 p-4">
                 <div className="row">
                     <div className="col-1">
-                        <VoteCounter comment={comment} type={type} replies={replies} comments={comments} parentIndex={parentIndex} />
+                        <VoteCounter comment={comment} type={type} comments={comments} parentIndex={parentIndex} updateScore={updateScore} />
                     </div>
                     <div className="col-11">
                         <div className="header row">

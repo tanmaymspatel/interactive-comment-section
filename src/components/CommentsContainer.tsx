@@ -75,6 +75,23 @@ function CommentsContainer() {
         }
     }
 
+    const updateScore = (type: string, score: number, isVoted: boolean, parentIndex: number) => {
+        console.log({ type }, { score }, { isVoted }, { parentIndex });
+        let updatedComments = [...comments];
+        switch (type) {
+            case "main-comment": {
+                updatedComments[parentIndex].upvotes = score;
+                updatedComments[parentIndex].voted = isVoted;
+                setComments(updatedComments);
+                break;
+            }
+            case "reply": {
+                break;
+            }
+        }
+
+    }
+
     useEffect(() => {
         localStorage.setItem("comments", JSON.stringify(comments))
     }, [comments]);
@@ -108,6 +125,7 @@ function CommentsContainer() {
                                         setCommentTobeEdited={setCommentTobeEdited}
                                         setEditedCommentParentIndex={setEditedCommentParentIndex}
                                         setEditedReplyIndex={setEditedReplyIndex}
+                                        updateScore={updateScore}
                                     />
                                     {((isReplying || isEditing) && isParentComment && parentCommentIndex === index) ? <CommentInput updatedComments={updatedComments} type="main-comment" addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
                                     <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
@@ -136,6 +154,7 @@ function CommentsContainer() {
                                                         setEditedCommentParentIndex={setEditedCommentParentIndex}
                                                         setEditedReplyIndex={setEditedReplyIndex}
                                                         replyCommentIndex={i}
+                                                        updateScore={updateScore}
                                                     />
                                                 )
                                             })
