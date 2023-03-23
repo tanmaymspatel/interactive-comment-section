@@ -3,15 +3,16 @@ import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
-function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, isEditing, setIsEditing, commentTobeEdited }: any) {
+function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, isEditing, setIsEditing, commentTobeEdited, type, updatedComments }: any) {
 
     const replyingToUser = isReplying ? replyTo : "";
     const [commentContent, setCommentContent] = useState<string>(replyingToUser);
+    const [editedCommentContent, setEditedCommentContent] = useState<string>("")
 
-    useEffect(() => {
-        console.log(commentTobeEdited);
-    }, [commentTobeEdited])
-
+    const onChangeHandler = (e: any) => {
+        setCommentContent(e.target.value)
+        isEditing ? setEditedCommentContent(e.target.value) : setEditedCommentContent("")
+    }
 
     const submitHandler = () => {
         console.log({ isEditing }, { isReplying });
@@ -28,11 +29,12 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
             replies: [],
         };
 
-        (isReplying && !isEditing) ? addReplies(parentId, newComment) : addComments(newComment);
+
+        (isReplying && !isEditing) ? addReplies(parentId, newComment) : (isEditing ? updatedComments(type, editedCommentContent) : addComments(newComment));
         setCommentContent("");
         setIsReplying(false);
         setIsEditing(false);
-        console.log({ isEditing }, { isReplying });
+
     }
 
     const contentString = commentTobeEdited?.content;
@@ -51,7 +53,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
                         className="comment-box w-100 p-2"
                         name="comment" id="comment" rows={3} autoFocus
                         value={commentContent}
-                        onChange={(e) => setCommentContent(e.target.value)}
+                        onChange={(e) => onChangeHandler(e)}
                     ></textarea>
                 </div>
                 <div className="col-2">

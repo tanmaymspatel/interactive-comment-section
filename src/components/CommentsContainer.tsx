@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import Commments from "../pages/Commments";
 import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import CommentInput from "./CommentInput";
@@ -20,7 +19,9 @@ function CommentsContainer() {
     const [replyCommentParentIndex, setReplyCommentParentIndex] = useState<number>(0);
     const [deleteReplyId, setDeleteReplyId] = useState<number>(0);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [commentTobeEdited, setCommentTobeEdited] = useState<ICommentsDetails>({} as ICommentsDetails)
+    const [commentTobeEdited, setCommentTobeEdited] = useState<ICommentsDetails>({} as ICommentsDetails);
+    const [editedCommentParentIndex, setEditedCommentParentIndex] = useState<number>(0);
+    const [editedReplyIndex, setEditedReplyIndex] = useState<number>(0);
 
     const addComments = (newComment: ICommentsDetails) => {
         const updatedComments = [...comments, newComment];
@@ -47,7 +48,6 @@ function CommentsContainer() {
                 return;
             }
             case "reply": {
-                console.log(comments[replyCommentParentIndex].replies, deleteReplyId);
                 const updatedReplies = updatedComments[replyCommentParentIndex].replies.filter(reply => reply.id !== deleteReplyId)
                 updatedComments[replyCommentParentIndex].replies = updatedReplies;
                 setComments(updatedComments);
@@ -58,9 +58,24 @@ function CommentsContainer() {
         }
     }
 
+    const updatedComments = (type: string, editedCommentContent: string) => {
+        let updatedComments = [...comments]
+        commentTobeEdited.content = editedCommentContent;
+        switch (type) {
+            case "main-comment": {
+                updatedComments.splice(editedCommentParentIndex, 1, commentTobeEdited)
+                setComments(updatedComments);
+                break;
+            }
+            case "reply": {
+                updatedComments[editedCommentParentIndex]?.replies?.splice(editedReplyIndex, 1, commentTobeEdited)
+                setComments(updatedComments);
+                break;
+            }
+        }
+    }
 
     useEffect(() => {
-        // console.log(comments);
         localStorage.setItem("comments", JSON.stringify(comments))
     }, [comments]);
 
@@ -91,11 +106,13 @@ function CommentsContainer() {
                                         setReplyCommentParentIndex={setReplyCommentParentIndex}
                                         setDeleteReplyId={setDeleteReplyId}
                                         setCommentTobeEdited={setCommentTobeEdited}
+                                        setEditedCommentParentIndex={setEditedCommentParentIndex}
+                                        setEditedReplyIndex={setEditedReplyIndex}
                                     />
-                                    {((isReplying || isEditing) && isParentComment && parentCommentIndex === index) ? <CommentInput addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
+                                    {((isReplying || isEditing) && isParentComment && parentCommentIndex === index) ? <CommentInput updatedComments={updatedComments} type="main-comment" addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
                                     <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
                                         {
-                                            comment?.replies?.length > 0 && comment?.replies?.map((cmt: ICommentsDetails) => {
+                                            comment?.replies?.length > 0 && comment?.replies?.map((cmt: ICommentsDetails, i: number) => {
                                                 return (
                                                     <SingleCommentCard
                                                         key={cmt?.id}
@@ -116,11 +133,14 @@ function CommentsContainer() {
                                                         setDeleteReplyId={setDeleteReplyId}
                                                         setIsEditing={setIsEditing}
                                                         setCommentTobeEdited={setCommentTobeEdited}
+                                                        setEditedCommentParentIndex={setEditedCommentParentIndex}
+                                                        setEditedReplyIndex={setEditedReplyIndex}
+                                                        replyCommentIndex={i}
                                                     />
                                                 )
                                             })
                                         }
-                                        {((isReplying || isEditing) && isReplyComment && (replyParentIndex === index)) ? <CommentInput addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
+                                        {((isReplying || isEditing) && isReplyComment && (replyParentIndex === index)) ? <CommentInput updatedComments={updatedComments} type="reply" addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
                                     </div>
                                 </div>
                             )

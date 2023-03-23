@@ -5,7 +5,7 @@ import deleteIcon from "../assets/images/icon-delete.svg"
 import editIcon from "../assets/images/icon-edit.svg"
 import DeleteModel from "./DeleteModel";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited }: any) {
+function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited, setEditedCommentParentIndex, setEditedReplyIndex, replyCommentIndex }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
 
     const { commentPostedTime } = utilityServices;
@@ -16,6 +16,7 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
     const replyHandler = () => {
         setIsReplying((prev: boolean) => !prev);
         setReplyTo(`@${comment?.userName}`);
+        setReplyCommentParentIndex(index);
         switch (type) {
             case "main-comment":
                 setIsParentComment((prev: boolean) => !prev);
@@ -37,7 +38,9 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
     };
 
     const editCommentHandler = () => {
-        setIsEditing((prev: boolean) => !prev);
+        setEditedCommentParentIndex(index);
+        setEditedReplyIndex(replyCommentIndex);
+        setIsEditing(true);
         replyHandler();
         setIsReplying(false);
         setCommentTobeEdited(comment);
