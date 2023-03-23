@@ -30,15 +30,16 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
 
         (isReplying && !isEditing) ? addReplies(parentId, newComment) : addComments(newComment);
         setCommentContent("");
-        debugger
         setIsReplying(false);
         setIsEditing(false);
         console.log({ isEditing }, { isReplying });
     }
 
+    const contentString = commentTobeEdited?.content;
+
     useEffect(() => {
-        isEditing ? setCommentContent(commentTobeEdited?.content) : setCommentContent(commentContent);
-    }, [])
+        isEditing ? setCommentContent(contentString) : setCommentContent(replyingToUser);
+    }, [isEditing, contentString, replyingToUser])
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
