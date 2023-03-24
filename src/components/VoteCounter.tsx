@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function VoteCounter({ comment, type, parentIndex, updateScore }: any) {
 
@@ -6,28 +6,30 @@ function VoteCounter({ comment, type, parentIndex, updateScore }: any) {
     const [score, setScore] = useState<number>(comment.upvotes);
 
     const upvoteHandler = () => {
+        if (comment.isCurrentUSer) return;
         if (!isVoted) {
-            setScore(prev => prev + 1);
+            let n = score + 1;
+            setScore(n);
+            updateScore(type, n, "upvote", comment?.id);
             setIsVoted(true);
         }
     }
 
-    // useEffect(() => {
-    //     updateScore(type, score, isVoted, parentIndex);
-    // }, [score, isVoted, type, updateScore, parentIndex]);
-
     const downVoteHandler = () => {
+        if (comment.isCurrentUSer) return;
         if (isVoted) {
-            setScore(prev => prev - 1);
+            let n = score - 1;
+            setScore(n);
+            updateScore(type, n, "downvote", comment?.id);
             setIsVoted(false);
         }
     }
 
     return (
-        <div className="h-100 d-flex flex-column align-items-center justify-content-center bg-info rounded-3">
-            <button className="btn btn-actions fw-bold" onClick={upvoteHandler}>+</button>
+        <div className="h-100 d-flex flex-md-column align-items-center justify-content-center bg-info rounded-3">
+            <button className="btn btn-actions ms-2 ms-md-0 fw-bold" onClick={upvoteHandler}>+</button>
             <p className="mb-0 fw-bold text-primary">{score}</p>
-            <button className="btn btn-actions fw-bold" onClick={downVoteHandler}>-</button>
+            <button className="btn btn-actions me-2 me-md-0 fw-bold" onClick={downVoteHandler}>-</button>
         </div>
     )
 };

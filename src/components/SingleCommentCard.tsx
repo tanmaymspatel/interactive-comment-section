@@ -46,12 +46,12 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         setCommentTobeEdited(comment);
     }
 
-    const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between">
+    const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between me-1 me-sm-3">
         <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={deleteCommentHandler}>
             <img src={deleteIcon} alt="delete-comment" />
             <span className="mx-1">Delete</span>
         </p>
-        <p className="text-primary d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={editCommentHandler}>
+        <p className="text-primary d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover ms-1 ms-sm-3" onClick={editCommentHandler}>
             <img src={editIcon} alt="edit-comment" />
             <span className="mx-1">Edit</span>
         </p>
@@ -69,20 +69,20 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
 
     return (
         <>
-            <div className="card rounded-3 mb-4 p-4">
-                <div className="row">
-                    <div className="col-1">
+            <div className="card rounded-3 mb-4 p-3 p-md-4">
+                <div className="row position-relative">
+                    <div className="vote-counter col-5 col-md-2 mt-3 mt-md-0">
                         <VoteCounter comment={comment} type={type} comments={comments} parentIndex={parentIndex} updateScore={updateScore} />
                     </div>
-                    <div className="col-11">
+                    <div className="col-md-10">
                         <div className="header row">
-                            <div className="col-8 d-flex align-items-center">
+                            <div className="col-md-8 d-flex align-items-center">
                                 <img src={profilePicture} alt="profile" className="profile-image" />
-                                <p className="mx-3 mb-0 fw-bold">{userName}</p>
+                                <p className="mx-1 mx-md-3 mb-0 fw-bold">{userName}</p>
                                 {comment.isCurrentUSer && <p className=" mb-0 px-3 py-1 text-light bg-primary rounded-1">you</p>}
-                                <p className="mx-2 mb-0">{`${commentPostedTime(commentTimeInMiliSeconds)} ago`}</p>
+                                <p className="mx-2 mb-0 text-nowrap text-truncate" title={`${commentPostedTime(commentTimeInMiliSeconds)} ago`}>{`${commentPostedTime(commentTimeInMiliSeconds)} ago`}</p>
                             </div>
-                            <div className="col-4 d-flex align-items-center justify-content-end">
+                            <div className="col-action col-7 col-sm-4 d-flex align-items-center justify-content-end">
                                 {comment.isCurrentUSer ? deleteEditText : replyText}
                             </div>
                         </div>

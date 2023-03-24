@@ -3,9 +3,9 @@ import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
-function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, parentId, isEditing, setIsEditing, commentTobeEdited, type, updatedComments }: any) {
+function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, isEditing, setIsEditing, commentTobeEdited, type, updatedComments }: any) {
 
-    const replyingToUser = isReplying ? replyTo : "";
+    const replyingToUser = isReplying + " " ? replyTo : "";
     const [commentContent, setCommentContent] = useState<string>(replyingToUser);
     const [editedCommentContent, setEditedCommentContent] = useState<string>("")
 
@@ -15,7 +15,6 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
     }
 
     const submitHandler = () => {
-        console.log({ isEditing }, { isReplying });
         if (commentContent === "" || commentContent === " ") return;
 
         const newComment: ICommentsDetails = {
@@ -30,14 +29,14 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
         };
 
 
-        (isReplying && !isEditing) ? addReplies(parentId, newComment) : (isEditing ? updatedComments(type, editedCommentContent) : addComments(newComment));
+        (isReplying && !isEditing) ? addReplies(newComment) : (isEditing ? updatedComments(type, editedCommentContent) : addComments(newComment));
         setCommentContent("");
         setIsReplying(false);
         setIsEditing(false);
 
     }
 
-    const contentString = commentTobeEdited?.content;
+    const contentString = commentTobeEdited?.content + " ";
 
     useEffect(() => {
         isEditing ? setCommentContent(contentString) : setCommentContent(replyingToUser);
@@ -45,10 +44,10 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
-                <figure className="col-1 mb-0">
+                <figure className="col-3 col-md-1 mb-0">
                     <img src={currentUSer} alt="current-user" className="profile-image" />
                 </figure>
-                <div className="col-9">
+                <div className="col-md-9 comment-textarea mb-3 mb-md-0">
                     <textarea
                         className="comment-box w-100 p-2"
                         name="comment" id="comment" rows={3} autoFocus
@@ -56,8 +55,8 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
                         onChange={(e) => onChangeHandler(e)}
                     ></textarea>
                 </div>
-                <div className="col-2">
-                    <button type="submit" className="w-100 col-2 btn btn-primary" onClick={submitHandler}>{isReplying ? "REPLY" : (isEditing ? "UPDATE" : "SEND")}</button>
+                <div className="col-9 col-md-2 text-end">
+                    <button type="submit" className="comment-input-btn col-2 btn btn-primary" onClick={submitHandler}>{isReplying ? "REPLY" : (isEditing ? "UPDATE" : "SEND")}</button>
                 </div>
             </div>
         </div>

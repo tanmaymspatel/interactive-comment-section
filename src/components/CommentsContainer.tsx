@@ -26,17 +26,12 @@ function CommentsContainer() {
     const addComments = (newComment: ICommentsDetails) => {
         const updatedComments = [...comments, newComment];
         setComments(updatedComments);
-        localStorage.setItem("comments", JSON.stringify(comments));
     };
 
-    const addReplies = (parentId: number, reply: ICommentsDetails) => {
-        comments.forEach(comment => {
-            if (comment.id === parentId) {
-                comment.replies.push(reply);
-            }
-            setComments(comments);
-            localStorage.setItem("comments", JSON.stringify(comments))
-        })
+    const addReplies = (reply: ICommentsDetails) => {
+        let updatedComments = [...comments]
+        updatedComments[replyCommentParentIndex].replies.push(reply);
+        setComments(comments);
     }
 
     const deleteComment = (type: string, id: number) => {
@@ -75,21 +70,32 @@ function CommentsContainer() {
         }
     }
 
-    const updateScore = (type: string, score: number, isVoted: boolean, parentIndex: number) => {
-        console.log({ type }, { score }, { isVoted }, { parentIndex });
+    const updateScore = (type: string, score: number, method: string, commentId: number) => {
         let updatedComments = [...comments];
         switch (type) {
             case "main-comment": {
-                updatedComments[parentIndex].upvotes = score;
-                updatedComments[parentIndex].voted = isVoted;
+                updatedComments.forEach((comment) => {
+                    if (comment.id === commentId) {
+                        comment.upvotes = score;
+                        comment.voted = method === "upvote" ? true : false;
+                    }
+                });
                 setComments(updatedComments);
                 break;
             }
             case "reply": {
+                updatedComments.forEach((comment) => {
+                    comment.replies.forEach((data) => {
+                        if (data.id === commentId) {
+                            data.upvotes = score;
+                            data.voted = method === "upvote" ? true : false;
+                        }
+                    });
+                });
+                setComments(updatedComments);
                 break;
             }
         }
-
     }
 
     useEffect(() => {
@@ -99,7 +105,7 @@ function CommentsContainer() {
 
     return (
         <>
-            <div className="flex-grow-1 overflow-hidden pt-5 pb-3">
+            <div className="flex-grow-1 overflow-hidden pt-0 pt-md-5 pb-3">
                 <div className="h-100 overflow-auto pe-3">
                     {
                         comments?.map((comment: ICommentsDetails, index: number) => {
@@ -128,7 +134,7 @@ function CommentsContainer() {
                                         updateScore={updateScore}
                                     />
                                     {((isReplying || isEditing) && isParentComment && parentCommentIndex === index) ? <CommentInput updatedComments={updatedComments} type="main-comment" addComments={addComments} addReplies={addReplies} isReplying={isReplying} replyTo={replyTo} setIsReplying={setIsReplying} isEditing={isEditing} setIsEditing={setIsEditing} commentTobeEdited={commentTobeEdited} /> : null}
-                                    <div className="ms-5 ps-5 border-3 border-start border-warning my-4">
+                                    <div className="ms-1 ps-2 ms-md-5 ps-md-5 border-3 border-start border-warning my-4">
                                         {
                                             comment?.replies?.length > 0 && comment?.replies?.map((cmt: ICommentsDetails, i: number) => {
                                                 return (
