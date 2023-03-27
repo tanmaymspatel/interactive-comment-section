@@ -56,7 +56,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
                     <textarea
                         className="comment-box w-100 p-2"
                         name="comment" id="comment" rows={3}
-                        autoFocus={!isEditing && !isReplying ? true : false}
+                        autoFocus={!isReplying ? true : false}
                         value={commentContent}
                         onChange={(e) => onChangeHandler(e)}
                     ></textarea>
