@@ -3,7 +3,9 @@ import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import CommentInput from "./CommentInput";
 import SingleCommentCard from "./SingleCommentCard";
-
+/**
+ * @returns interactive comment section
+ */
 function CommentsContainer() {
 
     const allComments = JSON.parse(localStorage.getItem("comments") as string);
@@ -22,18 +24,32 @@ function CommentsContainer() {
     const [commentTobeEdited, setCommentTobeEdited] = useState<ICommentsDetails>({} as ICommentsDetails);
     const [editedCommentParentIndex, setEditedCommentParentIndex] = useState<number>(0);
     const [editedReplyIndex, setEditedReplyIndex] = useState<number>(0);
-
+    /**
+     * @name addComments
+     * @description Addition of a new comment
+     * @param newComment the comment which is to be added
+     * 
+     */
     const addComments = (newComment: ICommentsDetails) => {
         const updatedComments = [...comments, newComment];
         setComments(updatedComments);
     };
-
+    /**
+     * @name addReplies
+     * @description Additon of a new reply
+     * @param reply the reply which is to be added
+     */
     const addReplies = (reply: ICommentsDetails) => {
         let updatedComments = [...comments]
         updatedComments[replyCommentParentIndex].replies.push(reply);
         setComments(comments);
     }
-
+    /**
+     * @name deleteComment
+     * @description Delete the comment
+     * @param type type of comment, whether main-comment or reply in comment
+     * @param id Id of the comment
+     */
     const deleteComment = (type: string, id: number) => {
         let updatedComments = [...comments];
         switch (type) {
@@ -52,7 +68,12 @@ function CommentsContainer() {
                 return;
         }
     }
-
+    /**
+     * @name updatedComments 
+     * @description Update thecomment 
+     * @param type type of comment, whether main-comment or reply in comment
+     * @param editedCommentContent the content of the comment which is edited
+     */
     const updatedComments = (type: string, editedCommentContent: string) => {
         let updatedComments = [...comments]
         commentTobeEdited.content = editedCommentContent;
@@ -69,7 +90,14 @@ function CommentsContainer() {
             }
         }
     }
-
+    /**
+     * @name updateScore
+     * @description For updating the upvote score when upvoting/downvoting is clicked
+     * @param type type of comment, whether main-comment or reply in comment
+     * @param score updated value of the upvotes
+     * @param method whether upvoting or downvoting
+     * @param commentId Id of the comment
+     */
     const updateScore = (type: string, score: number, method: string, commentId: number) => {
         let updatedComments = [...comments];
         switch (type) {
@@ -97,11 +125,10 @@ function CommentsContainer() {
             }
         }
     }
-
+    // store the value of the comments in after the change in the comments array
     useEffect(() => {
         localStorage.setItem("comments", JSON.stringify(comments))
     }, [comments]);
-
 
     return (
         <>
@@ -141,7 +168,6 @@ function CommentsContainer() {
                                                     <SingleCommentCard
                                                         key={cmt?.id}
                                                         comment={cmt}
-                                                        replies={comment.replies}
                                                         comments={comments}
                                                         type="reply"
                                                         setIsReplying={setIsReplying}

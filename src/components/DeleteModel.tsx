@@ -1,3 +1,6 @@
+/** 
+ * @returns delete model for deleting the comment 
+ */
 function DeleteModel({ setDeleting, comment, type, deleteComment }: any) {
 
     const deleteCommentHandler = () => {

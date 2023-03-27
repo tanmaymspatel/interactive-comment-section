@@ -1,6 +1,8 @@
 import { useState } from "react";
-
-function VoteCounter({ comment, type, parentIndex, updateScore }: any) {
+/**
+ * @returns counter to manipulate the upvotes
+ */
+function VoteCounter({ comment, type, updateScore }: any) {
 
     const [isVoted, setIsVoted] = useState<boolean>(comment.voted ?? false);
     const [score, setScore] = useState<number>(comment.upvotes);

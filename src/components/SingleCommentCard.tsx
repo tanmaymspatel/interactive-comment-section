@@ -5,14 +5,14 @@ import deleteIcon from "../assets/images/icon-delete.svg"
 import editIcon from "../assets/images/icon-edit.svg"
 import DeleteModel from "./DeleteModel";
 
-function SingleCommentCard({ comment, replies, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited, setEditedCommentParentIndex, setEditedReplyIndex, replyCommentIndex, updateScore }: any) {
+function SingleCommentCard({ comment, comments, type, parentIndex, setIsParentComment, setIsReply, setParentCommentIndex, setReplyParentIndex, setIsReplying, setReplyTo, setDeleting, deleting, deleteComment, index, setReplyCommentParentIndex, setDeleteReplyId, setIsEditing, setCommentTobeEdited, setEditedCommentParentIndex, setEditedReplyIndex, replyCommentIndex, updateScore }: any) {
     const { userName, commentingDate, content, profilePicture } = comment;
-
+    // comment timing calculation
     const { commentPostedTime } = utilityServices;
     const commentDate = new Date(commentingDate);
     const currentDate = new Date();
     const commentTimeInMiliSeconds = currentDate.getTime() - commentDate.getTime();
-
+    // while clicking on reply text
     const replyHandler = () => {
         setIsReplying((prev: boolean) => !prev);
         setReplyTo(`@${comment?.userName}`);
@@ -30,13 +30,13 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
                 return;
         }
     }
-
+    // actions to be taken after clicking delete text
     const deleteCommentHandler = () => {
         setReplyCommentParentIndex(index);
         setDeleteReplyId(comment.id);
         setDeleting(true);
     };
-
+    // actions to be taken after clicking edit text
     const editCommentHandler = () => {
         setEditedCommentParentIndex(index);
         setEditedReplyIndex(replyCommentIndex);
@@ -45,7 +45,7 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         setIsReplying(false);
         setCommentTobeEdited(comment);
     }
-
+    // delete and edit text markup
     const deleteEditText = <div className="w-75 text-end d-flex align-items-center justify-content-between me-1 me-sm-3">
         <p className="text-danger d-flex align-items-center fw-bold mb-0 cursor-pointer transition opacity-hover" onClick={deleteCommentHandler}>
             <img src={deleteIcon} alt="delete-comment" />
@@ -56,7 +56,7 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
             <span className="mx-1">Edit</span>
         </p>
     </div>
-
+    // reply text markup
     const replyText = <div className="w-100 text-end">
         <div className="cursor-pointer text-primary fw-bold"
             onClick={replyHandler}
@@ -66,13 +66,12 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         </div>
     </div>
 
-
     return (
         <>
             <div className="card rounded-3 mb-4 p-3 p-md-4">
                 <div className="row position-relative">
                     <div className="vote-counter col-5 col-md-1 mt-3 mt-md-0">
-                        <VoteCounter comment={comment} type={type} comments={comments} parentIndex={parentIndex} updateScore={updateScore} />
+                        <VoteCounter comment={comment} type={type} comments={comments} updateScore={updateScore} />
                     </div>
                     <div className="col-md-11">
                         <div className="header row">

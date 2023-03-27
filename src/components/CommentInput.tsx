@@ -2,18 +2,24 @@ import { useEffect, useState } from "react";
 import currentUSer from "../assets/images/avatars/image-juliusomo.png"
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import profilePicture from "../assets/images/avatars/image-juliusomo.png"
-
+/**
+ * @returns Adding/ replying/ editing a comment component
+ */
 function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, isEditing, setIsEditing, commentTobeEdited, type, updatedComments }: any) {
 
     const replyingToUser = isReplying ? `${replyTo}, ` : "";
     const [commentContent, setCommentContent] = useState<string>(replyingToUser);
-    const [editedCommentContent, setEditedCommentContent] = useState<string>("")
-
+    const [editedCommentContent, setEditedCommentContent] = useState<string>("");
+    /**
+     * @description setting the comment value when onChange event occurs
+     */
     const onChangeHandler = (e: any) => {
         setCommentContent(e.target.value)
-        isEditing ? setEditedCommentContent(e.target.value) : setEditedCommentContent("")
+        isEditing ? setEditedCommentContent(e.target.value) : setEditedCommentContent("");
     }
-
+    /**
+     *@description when the submit cutton is clicked 
+     */
     const submitHandler = () => {
         if (commentContent === "" || commentContent === " ") return;
 
@@ -27,8 +33,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
             isCurrentUSer: true,
             replies: [],
         };
-
-
+        // action to be taken on specific conditions
         (isReplying && !isEditing) ? addReplies(newComment) : (isEditing ? updatedComments(type, editedCommentContent) : addComments(newComment));
         setIsReplying(false);
         setIsEditing(false);
@@ -36,7 +41,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
     }
 
     const contentString = commentTobeEdited?.content + " ";
-
+    // conditionally setting the value into the comment text area 
     useEffect(() => {
         (isEditing && !isReplying) ? setCommentContent(contentString) : setCommentContent(replyingToUser);
     }, [isEditing, contentString, replyingToUser, isReplying]);
