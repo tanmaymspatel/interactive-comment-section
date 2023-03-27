@@ -43,7 +43,7 @@ function CommentsContainer() {
     const addReplies = (reply: ICommentsDetails) => {
         let updatedComments = [...comments]
         updatedComments[replyCommentParentIndex].replies.push(reply);
-        setComments(comments);
+        setComments(updatedComments);
     }
     /**
      * @name deleteComment
@@ -132,13 +132,13 @@ function CommentsContainer() {
     }, [comments]);
 
     useEffect(() => {
-        autoScroll.current?.scrollIntoView({ behavior: 'smooth' });
+        autoScroll.current?.lastElementChild?.scrollIntoView();
     }, [comments]);
 
     return (
         <>
             <div className="flex-grow-1 overflow-hidden pt-0 pt-md-5 pb-3">
-                <div className="h-100 overflow-auto pe-3">
+                <div className="h-100 overflow-auto pe-3" ref={autoScroll}>
                     {
                         comments?.map((comment: ICommentsDetails, index: number) => {
                             return (
@@ -203,7 +203,6 @@ function CommentsContainer() {
                         })
                     }
                 </div>
-                <div ref={autoScroll}></div>
             </div>
             <CommentInput addComments={addComments} setIsReplying={setIsReplying} setIsEditing={setIsEditing} />
         </>
