@@ -1,3 +1,8 @@
+/**
+ * @name commentPostedTime
+ * @description caluculate time in readable format
+ * @param timeMiliSec posted comment time from the current time
+ */
 const commentPostedTime = (timeMiliSec: number) => {
     const sec = Number((timeMiliSec / 1000).toFixed(0));
     const min = Number((timeMiliSec / (1000 * 60)).toFixed(0));
