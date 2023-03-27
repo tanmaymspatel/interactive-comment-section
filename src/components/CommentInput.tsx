@@ -5,7 +5,7 @@ import profilePicture from "../assets/images/avatars/image-juliusomo.png"
 
 function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReplying, isEditing, setIsEditing, commentTobeEdited, type, updatedComments }: any) {
 
-    const replyingToUser = isReplying + " " ? replyTo : "";
+    const replyingToUser = isReplying ? `${replyTo}, ` : "";
     const [commentContent, setCommentContent] = useState<string>(replyingToUser);
     const [editedCommentContent, setEditedCommentContent] = useState<string>("")
 
@@ -19,7 +19,7 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
 
         const newComment: ICommentsDetails = {
             id: Math.floor(Math.random() * 100) + 5,
-            content: commentContent,
+            content: replyingToUser + commentContent.replace(replyingToUser, ""),
             commentingDate: new Date().toString(),
             upvotes: 0,
             userName: "juliusomo",
@@ -30,17 +30,17 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
 
 
         (isReplying && !isEditing) ? addReplies(newComment) : (isEditing ? updatedComments(type, editedCommentContent) : addComments(newComment));
-        setCommentContent("");
         setIsReplying(false);
         setIsEditing(false);
-
+        setCommentContent("");
     }
 
     const contentString = commentTobeEdited?.content + " ";
 
     useEffect(() => {
-        isEditing ? setCommentContent(contentString) : setCommentContent(replyingToUser);
-    }, [isEditing, contentString, replyingToUser])
+        (isEditing && !isReplying) ? setCommentContent(contentString) : setCommentContent(replyingToUser);
+    }, [isEditing, contentString, replyingToUser, isReplying]);
+
     return (
         <div className="card new-comment rounded-3 p-4">
             <div className="row justify-content-between">
@@ -50,7 +50,8 @@ function CommentInput({ isReplying, addComments, addReplies, replyTo, setIsReply
                 <div className="col-md-9 comment-textarea mb-3 mb-md-0">
                     <textarea
                         className="comment-box w-100 p-2"
-                        name="comment" id="comment" rows={3} autoFocus
+                        name="comment" id="comment" rows={3}
+                        autoFocus={!isEditing && !isReplying ? true : false}
                         value={commentContent}
                         onChange={(e) => onChangeHandler(e)}
                     ></textarea>

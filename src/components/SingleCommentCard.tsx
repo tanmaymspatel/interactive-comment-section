@@ -71,10 +71,10 @@ function SingleCommentCard({ comment, replies, comments, type, parentIndex, setI
         <>
             <div className="card rounded-3 mb-4 p-3 p-md-4">
                 <div className="row position-relative">
-                    <div className="vote-counter col-5 col-md-2 mt-3 mt-md-0">
+                    <div className="vote-counter col-5 col-md-1 mt-3 mt-md-0">
                         <VoteCounter comment={comment} type={type} comments={comments} parentIndex={parentIndex} updateScore={updateScore} />
                     </div>
-                    <div className="col-md-10">
+                    <div className="col-md-11">
                         <div className="header row">
                             <div className="col-md-8 d-flex align-items-center">
                                 <img src={profilePicture} alt="profile" className="profile-image" />
