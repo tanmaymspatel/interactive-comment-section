@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { commentsData } from "../shared/data/data";
 import { ICommentsDetails } from "../shared/models/CommentsDetails";
 import CommentInput from "./CommentInput";
@@ -8,6 +8,7 @@ import SingleCommentCard from "./SingleCommentCard";
  */
 function CommentsContainer() {
 
+    const autoScroll = useRef<any>(null);
     const allComments = JSON.parse(localStorage.getItem("comments") as string);
 
     const [comments, setComments] = useState<ICommentsDetails[]>(allComments ?? commentsData);
@@ -127,7 +128,11 @@ function CommentsContainer() {
     }
     // store the value of the comments in after the change in the comments array
     useEffect(() => {
-        localStorage.setItem("comments", JSON.stringify(comments))
+        localStorage.setItem("comments", JSON.stringify(comments));
+    }, [comments]);
+
+    useEffect(() => {
+        autoScroll.current?.scrollIntoView({ behavior: 'smooth' });
     }, [comments]);
 
     return (
@@ -198,6 +203,7 @@ function CommentsContainer() {
                         })
                     }
                 </div>
+                <div ref={autoScroll}></div>
             </div>
             <CommentInput addComments={addComments} setIsReplying={setIsReplying} setIsEditing={setIsEditing} />
         </>
